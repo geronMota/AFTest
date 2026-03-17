@@ -1,11 +1,27 @@
 pipeline {
     agent any
+
     stages {
-        stage('Olá Mundo') {
+
+        stage('Checkout') {
             steps {
-                echo 'Jenkinsfile encontrado! Projeto AFTest rodando.'
-                bat 'mvn --version'  // testa se Maven está ok
+                echo 'Baixando código do GitHub'
             }
         }
+
+        stage('Build') {
+            steps {
+                echo 'Compilando projeto'
+                bat 'mvn clean compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Executando testes'
+                bat 'mvn test'
+            }
+        }
+
     }
 }
