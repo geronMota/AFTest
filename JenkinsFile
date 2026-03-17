@@ -1,27 +1,38 @@
 pipeline {
-    agent any
+    agent any  // roda em qualquer agente disponível
+
+    tools {
+        // Se você configurou Maven no Jenkins Global Tool Configuration
+        maven 'Maven'  // nome da instalação Maven no Jenkins
+    }
 
     stages {
-
         stage('Checkout') {
             steps {
-                echo 'Baixando código do GitHub'
+                // Já faz checkout automático, mas pode customizar
+                echo 'Checkout do código do GitHub'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Compilando projeto'
-                bat 'mvn clean compile'
+                bat 'mvn clean package'  // ou sh 'mvn ...' se for Linux
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Executando testes'
                 bat 'mvn test'
             }
         }
 
+        // Adicione mais stages: deploy, sonar, etc. depois
+    }
+
+    post {
+        always {
+            echo 'Pipeline finalizado!'
+            // archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
+        }
     }
 }
